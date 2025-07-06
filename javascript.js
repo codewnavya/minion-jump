@@ -10,16 +10,6 @@ let minionLeft;
 let minionX = boardWidth/2 - minionWidth/2;
 let minionY = boardHeight*7/8 - minionHeight;
 
-let velocityX = 0; //logic of the game
-let velocityY = 0; //the jump speed
-let initialVelocityY = -8;
-let gravity = 0.4;
-
-let platformArray = [];
-let platformWidth = 58;
-let platformHeight = 15;
-let platformImg;
-
 let minion = {
     img : null,
     x : minionX,
@@ -28,6 +18,19 @@ let minion = {
     height : minionHeight
 }
 
+let velocityX = 0; //logic of the game
+let velocityY = 0; //the jump speed
+let initialVelocityY = -8;
+let gravity = 0.4;
+
+let platformArray = [];
+let platformWidth = 58;
+let platformHeight = 14;
+let platformImg;
+
+let score = 0;
+let maxScore = 0;
+let gameOver=false;
 
 window.onload = function(){
     board = document.getElementById("board");
@@ -59,6 +62,9 @@ window.onload = function(){
 
 function update(){
     requestAnimationFrame(update);
+    if(gameOver){
+        return;
+    }
     context.clearRect(0,0,board.width,board.height);
  
     minion.x += velocityX;
@@ -71,6 +77,10 @@ function update(){
 
     velocityY += gravity;
     minion.y += velocityY;
+
+    if(minion.y > board.height){
+        gameOver = true;
+    }
     context.drawImage(minion.img, minion.x, minion.y, minion.width, minion.height);
 
     //platforms
@@ -86,7 +96,20 @@ function update(){
         context.drawImage(platform.img, platform.x,platform.y,platform.width,platform.height);
     }
 
-    // while(platformArray.length > 0 && platformArray[0].y >=  )
+    //clearing platforms and adding new as minion goes up
+    while(platformArray.length > 0 && platformArray[0].y >=  boardHeight + 100){
+        platformArray.shift(); 
+        newPlatforms();
+    }
+
+    updateScore();
+    context.fillStyle = "black";
+    context.font = "16px sans-serif";
+    context.fillText(score, 5, 20);
+
+    if(gameOver){
+        context.fillText("GAME OVER : Press 'Space' to Restart", boardWidth/7, boardHeight*7/8);
+    }
 }
 
 function moveMinion(e){
@@ -97,6 +120,24 @@ function moveMinion(e){
     else if(e.key == "ArrowLeft" || e.key == "KeyA"){
         velocityX = -4;
         minion.img = minionLeft;
+    }
+    else if(e.key == "ArrowUp"){
+        velocityY = -4;
+    }
+    else if(e.code == "Space" && gameOver){
+     minion = {
+    img : minionRight,
+    x : minionX,
+    y: minionY,
+    width : minionWidth,
+    height : minionHeight
+}
+        velocityX = 0;
+        velocityY = initialVelocityY;
+        score = 0;
+        maxScore = 0;
+        gameOver = false;
+        placePlatform();
     }
 }
 
@@ -157,4 +198,17 @@ function detect(a,b){
     a.y < b.y + b.height &&
     a.y < b.y + b.height &&
     a.y + a.height > b.y;
+}
+
+function updateScore(){
+    let points = Math.floor(30*Math.random());
+    if(velocityY < 0){ //that is when it goes up , velocity < 0 means neg and neg is up
+        maxScore += points;
+        if(score < maxScore){
+            score = maxScore;
+        }
+    }
+    else if(velocityY >= 0){
+        maxScore -= points;
+    }
 }
