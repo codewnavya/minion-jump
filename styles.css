@@ -1,6 +1,9 @@
 body{
    text-align: center; 
+   background-image: url('universe4.jpg');
 }
 #board{
     background-image: url('background.jpg');
+    border-radius: 10px;
+    background-size: cover;
 }

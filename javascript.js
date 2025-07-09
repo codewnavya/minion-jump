@@ -31,6 +31,8 @@ let platformImg;
 let score = 0;
 let maxScore = 0;
 let gameOver=false;
+let highScore=0;
+//before 
 
 window.onload = function(){
     board = document.getElementById("board");
@@ -79,6 +81,9 @@ function update(){
     minion.y += velocityY;
 
     if(minion.y > board.height){
+        if(score>highScore){
+            highScore=score;
+        }
         gameOver = true;
     }
     context.drawImage(minion.img, minion.x, minion.y, minion.width, minion.height);
@@ -108,7 +113,10 @@ function update(){
     context.fillText(score, 5, 20);
 
     if(gameOver){
-        context.fillText("GAME OVER : Press 'Space' to Restart", boardWidth/7, boardHeight*7/8);
+        context.fillText("GAME OVER : Press 'Space' to Restart" , boardWidth/7, boardHeight*7/8);
+        // context.fillText("Your score: " +score, boardWidth/7, boardHeight*7/8+20);
+        context.fillText("High Score: "+highScore , boardWidth/3, boardHeight*7/8+40);
+        context.textAlign = "center";
     }
 }
 
@@ -122,7 +130,7 @@ function moveMinion(e){
         minion.img = minionLeft;
     }
     else if(e.key == "ArrowUp"){
-        velocityY = -4;
+        velocityY = -6;
     }
     else if(e.code == "Space" && gameOver){
      minion = {
