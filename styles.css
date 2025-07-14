@@ -1,9 +1,10 @@
 body{
    text-align: center; 
-   background-image: url('universe4.jpg');
+   /* background-image: url('universe4.jpg'); */
 }
 #board{
-    background-image: url('background.jpg');
+    /* text-align: center; */
+    background-image: url('bg2.webp');
     border-radius: 10px;
-    background-size: cover;
+    background-size: cover; 
 }

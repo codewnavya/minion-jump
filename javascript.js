@@ -116,7 +116,7 @@ function update(){
         context.fillText("GAME OVER : Press 'Space' to Restart" , boardWidth/7, boardHeight*7/8);
         // context.fillText("Your score: " +score, boardWidth/7, boardHeight*7/8+20);
         context.fillText("High Score: "+highScore , boardWidth/3, boardHeight*7/8+40);
-        context.textAlign = "center";
+        // context.textAlign = "center";
     }
 }
 
